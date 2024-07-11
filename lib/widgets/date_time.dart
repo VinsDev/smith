@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smith/constants/colors.dart';
 import 'dart:async';
-import '../clippers.dart';
+import '../clippers/clippers.dart';
 
 class DateAndTimeContainer extends StatefulWidget {
   const DateAndTimeContainer({super.key});
@@ -50,9 +50,9 @@ class DateAndTimeContainerState extends State<DateAndTimeContainer> {
                         stream: _currentTimeStream(),
                         builder: (context, snapshot) {
                           final dateTime = snapshot.data ?? DateTime.now();
+                          // final date = "${_getMonth(dateTime.month)} ${dateTime.day}, ${dateTime.year}";
                           final date =
-                              "${_getMonth(dateTime.month)} ${dateTime.day}, ${dateTime.year}";
-                          // final date = "${_getWeekday(dateTime.weekday)}, ${_getMonth(dateTime.month)} ${dateTime.day}, ${dateTime.year}";
+                              "${_getWeekday(dateTime.weekday)}, ${_getMonth(dateTime.month)} ${dateTime.day}";
                           return Center(
                             child: Text(
                               date,

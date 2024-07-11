@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:smith/clippers.dart';
+import 'package:provider/provider.dart';
+import 'package:smith/clippers/clippers.dart';
 import 'package:smith/constants/colors.dart';
+import 'package:smith/constants/values.dart';
+import 'package:smith/providers/switch_notifier.dart';
+import 'displays.dart';
 
-Widget statsContainer(BuildContext context) {
+Widget statsContainer() {
   return Positioned(
     right: 17.5,
-    top: MediaQuery.of(context).size.height / 10,
+    top: screenHeight / 10,
     child: ClipPath(
       clipper: StatsClipper(),
       child: Container(
@@ -13,13 +17,13 @@ Widget statsContainer(BuildContext context) {
             color: Color.fromARGB(108, 27, 138, 172),
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(4), bottomLeft: Radius.circular(4))),
-        height: (MediaQuery.of(context).size.height - 13) * 0.77,
-        width: (MediaQuery.of(context).size.width - 13) * 0.25,
+        height: (screenHeight - 13) * 0.77,
+        width: (screenWidth - 13) * 0.25,
         child: Column(children: [
           Container(
             color: Colors.transparent,
-            width: (MediaQuery.of(context).size.width - 13) * 0.2,
-            height: (MediaQuery.of(context).size.height - 13) * 0.06,
+            width: (screenWidth - 13) * 0.2,
+            height: (screenHeight - 13) * 0.06,
             child: const Center(
                 child: Text(
               '< STATS >',
@@ -31,7 +35,7 @@ Widget statsContainer(BuildContext context) {
             )),
           ),
           SizedBox(
-            height: (MediaQuery.of(context).size.height - 13) * 0.70,
+            height: (screenHeight - 13) * 0.70,
             child: ListView(
               scrollDirection: Axis.vertical,
               children: const [],
@@ -45,8 +49,8 @@ Widget statsContainer(BuildContext context) {
 
 Widget appNameContainer(BuildContext context) {
   return Positioned(
-      top: MediaQuery.of(context).size.height * 0.12,
-      left: MediaQuery.of(context).size.height * 0.08,
+      top: screenHeight * 0.12,
+      left: screenHeight * 0.08,
       child: Column(
         children: [
           Container(
@@ -96,4 +100,31 @@ Widget appNameContainer(BuildContext context) {
           ),
         ],
       ));
+}
+
+// Filters display based on index . . .
+Widget filterDisplays(int index, List<DisplayObject> list) {
+  Widget r = const SizedBox.shrink();
+  for (var element in list) {
+    if (element.index == index) {
+      r = element.widget;
+    }
+  }
+  return r;
+}
+
+Widget displayPanelContainer(BuildContext context) {
+  final switchNotifier = Provider.of<SwitchNotifier>(context);
+  return Positioned(
+    bottom: screenWidth * 0.05 + 8,
+    left: screenWidth * 0.03 +
+        (screenWidth - 13) * 0.2 +
+        10 +
+        8,
+    child: SizedBox(
+        // color: moreTransparentContainerBackground,
+        height: (screenHeight - 13) * 0.77 - 4,
+        width: (screenWidth - 13) * 0.727 - 8,
+        child: filterDisplays(switchNotifier.displayIndex, displays)),
+  );
 }

@@ -1,13 +1,12 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:smith/constants/colors.dart';
-import 'package:smith/widgets/botton_slider.dart';
-import 'package:smith/widgets/bottons.dart';
+import 'package:smith/constants/values.dart';
+import 'package:smith/widgets/base_panel_button.dart';
+import 'package:smith/widgets/top_panel_button.dart';
+import 'package:smith/widgets/buttons.dart';
 import 'package:smith/widgets/containers.dart';
 import 'package:smith/widgets/date_time.dart';
-import 'package:smith/widgets/messages.dart';
-import 'clippers.dart';
+import 'clippers/clippers.dart';
 
 class Base extends StatefulWidget {
   const Base({super.key});
@@ -17,33 +16,39 @@ class Base extends StatefulWidget {
 }
 
 class BaseState extends State<Base> {
-  bool welcome = true;
   bool stats = false;
 
   final List<String> quickCommands = [
     "Make a Call",
-    "Greet Me",
     "Send a Text",
     "Launch an App",
     "Set an Alarm",
     "On Flashlight",
     "On Wifi",
-    "On Bluetooth",
-    "On Mobile Data",
+    "Turn On Bluetooth",
+    "Turn On Mobile Data",
     "Activate Camera",
     "Capture Sound",
     "Schedule Task",
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    Timer(Duration(seconds: 10), () {
-      setState(() {
-        welcome = false;
-      });
-    });
-  }
+  final List<String> peopleItems = [
+    "Family",
+    "Friends",
+    "Classmates",
+    "Colleagues",
+    "Mentors",
+    "Others",
+  ];
+
+  final List<String> chatItems = ["Lets talk", "Tell me a story", "I'm bored"];
+
+  final List<String> meItems = [
+    "Important life events",
+    "Achievements",
+    "Memories",
+    "Goals and Aspirations",
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +64,8 @@ class BaseState extends State<Base> {
             child: ClipPath(
                 clipper: MyCustomClipper1(),
                 child: Container(
-                  width: MediaQuery.of(context).size.width - 10,
-                  height: MediaQuery.of(context).size.height - 10,
+                  width: screenWidth - 10,
+                  height: screenHeight - 10,
                   color: lineColor,
                 )),
           ),
@@ -70,39 +75,36 @@ class BaseState extends State<Base> {
             child: ClipPath(
                 clipper: MyCustomClipper2(),
                 child: Container(
-                  width: MediaQuery.of(context).size.width - 13,
-                  height: MediaQuery.of(context).size.height - 13,
+                  width: screenWidth - 13,
+                  height: screenHeight - 13,
                   color: Colors.black,
                   child: Stack(children: [
                     // App Name . . .
                     appNameContainer(context),
                     // Vert. line before Q.C . . .
                     Positioned(
-                      bottom: MediaQuery.of(context).size.width * 0.05,
-                      left: MediaQuery.of(context).size.width * 0.03,
+                      bottom: screenWidth * 0.05,
+                      left: screenWidth * 0.03,
                       child: Container(
                         color: lineColor,
-                        height:
-                            (MediaQuery.of(context).size.height - 13) * 0.40,
+                        height: (screenHeight - 13) * 0.40,
                         width: 3.0,
                       ),
                     ),
                     // Quick Commands . . .
                     Positioned(
-                      bottom: MediaQuery.of(context).size.width * 0.05,
-                      left: MediaQuery.of(context).size.width * 0.03 + 6,
+                      bottom: screenWidth * 0.05,
+                      left: screenWidth * 0.03 + 6,
                       child: Container(
-                        color: const Color.fromARGB(108, 27, 138, 172),
-                        height:
-                            (MediaQuery.of(context).size.height - 13) * 0.40,
-                        width: (MediaQuery.of(context).size.width - 13) * 0.2,
+                        color: containerBackground,
+                        height: (screenHeight - 13) * 0.40,
+                        width: (screenWidth - 13) * 0.2,
                         child: Column(children: [
                           Container(
                             color: Colors.transparent,
                             width:
-                                (MediaQuery.of(context).size.width - 13) * 0.2,
-                            height: (MediaQuery.of(context).size.height - 13) *
-                                0.06,
+                                (screenWidth - 13) * 0.2,
+                            height: (screenHeight - 13) * 0.06,
                             child: const Center(
                                 child: Text(
                               'Quick Commands',
@@ -114,14 +116,12 @@ class BaseState extends State<Base> {
                             )),
                           ),
                           SizedBox(
-                            height: (MediaQuery.of(context).size.height - 13) *
-                                0.34,
+                            height: (screenHeight - 13) * 0.34,
                             child: ListView.builder(
                               scrollDirection: Axis.vertical,
                               itemCount: quickCommands.length,
                               itemBuilder: (context, index) {
-                                return quickCommandsItem(
-                                    quickCommands[index], context);
+                                return basicButton(quickCommands[index]);
                               },
                             ),
                           )
@@ -130,70 +130,62 @@ class BaseState extends State<Base> {
                     ),
                     // Vert. line after Q.C . . .
                     Positioned(
-                      bottom: MediaQuery.of(context).size.width * 0.05,
-                      left: MediaQuery.of(context).size.width * 0.03 +
-                          (MediaQuery.of(context).size.width - 13) * 0.2 +
+                      bottom: screenWidth * 0.05,
+                      left: screenWidth * 0.03 +
+                          (screenWidth - 13) * 0.2 +
                           10,
                       child: Container(
-                        color: const Color.fromARGB(255, 9, 179, 231),
-                        height:
-                            (MediaQuery.of(context).size.height - 13) * 0.40,
+                        color: lineColor,
+                        height: (screenHeight - 13) * 0.40,
                         width: 3.0,
                       ),
                     ),
                     // Horiz. line after Q.C . . .
                     Positioned(
-                      bottom: MediaQuery.of(context).size.width * 0.05,
-                      left: MediaQuery.of(context).size.width * 0.03 +
-                          (MediaQuery.of(context).size.width - 13) * 0.2 +
+                      bottom: screenWidth * 0.05,
+                      left: screenWidth * 0.03 +
+                          (screenWidth - 13) * 0.2 +
                           10,
                       child: Container(
                         color: lineColor,
                         height: 1.5,
-                        width: (MediaQuery.of(context).size.width - 13) * 0.727,
+                        width: (screenWidth - 13) * 0.727,
                       ),
                     ),
                     // Base Pannel . . .
                     Positioned(
                         bottom: 6.0,
-                        left: MediaQuery.of(context).size.width * 0.025,
+                        left: screenWidth * 0.025,
                         child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.93,
+                          width: screenWidth * 0.93,
                           child: Flex(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             direction: Axis.horizontal,
                             children: [
-                              button("HUB", BottomLeftClipper(), context),
-                              button("DATABASE", ButtonsClipper(), context),
-                              button("PROJECTS", ButtonsClipper(), context),
-                              button("ARMORY", BottomRightClipper(), context),
-                            ],
-                          ),
-                        )),
-                    // Top Pannel . . .
-                    Positioned(
-                        top: 6,
-                        right: MediaQuery.of(context).size.width * 0.025,
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.58,
-                          child: Flex(
-                            direction: Axis.horizontal,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TopButtons(
-                                  text: "PEOPLE", clipper: TopLeftClipper()),
-                              TopButtons(
-                                  text: "CHAT", clipper: TopButtonsClipper()),
-                              TopButtons(text: "ME", clipper: TopRightClipper())
+                              BasePanelButton(
+                                  index: 1,
+                                  text: "HUB",
+                                  clipper: BottomLeftClipper()),
+                              BasePanelButton(
+                                  index: 2,
+                                  text: "DATABASE",
+                                  clipper: ButtonsClipper()),
+                              BasePanelButton(
+                                  index: 3,
+                                  text: "PROJECTS",
+                                  clipper: ButtonsClipper()),
+                              BasePanelButton(
+                                  index: 4,
+                                  text: "ARMORY",
+                                  clipper: BottomRightClipper())
                             ],
                           ),
                         )),
                     // Stats Bar . . .
                     Positioned(
                       right: 7.0,
-                      top: MediaQuery.of(context).size.height / 10,
+                      top: screenHeight / 10,
                       child: ClipPath(
                         clipper: CenterRightClipper(),
                         child: GestureDetector(
@@ -211,8 +203,7 @@ class BaseState extends State<Base> {
                                 color: Color.fromARGB(111, 9, 179, 231),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(4))),
-                            height: (MediaQuery.of(context).size.height - 13) *
-                                0.77,
+                            height: (screenHeight - 13) * 0.77,
                             width: 12.0,
                             child: const Center(
                                 child: CircleAvatar(
@@ -227,16 +218,41 @@ class BaseState extends State<Base> {
                     // Stats . . .
                     Visibility(
                         visible: stats ? true : false,
-                        child: statsContainer(context)),
-                    // Welcome . . .
-                    welcome
-                        ? Align(
-                            alignment: Alignment.center,
-                            child: messageBox1(
-                                'GOOD DAY MR. VINCENT',
-                                message2: 'How can i help?',
-                                context))
-                        : const SizedBox(),
+                        child: statsContainer()),
+                    // Display Panel . . .
+                    displayPanelContainer(context),
+                    // Top Pannel . . .
+                    Positioned(
+                        top: 6,
+                        right: screenWidth * 0.025,
+                        child: SizedBox(
+                          width: screenWidth * 0.58,
+                          child: Flex(
+                            direction: Axis.horizontal,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TopPanelButtons(
+                                index: 5,
+                                text: "PEOPLE",
+                                clipper: TopLeftClipper(),
+                                dropdownItems: peopleItems,
+                              ),
+                              TopPanelButtons(
+                                index: 6,
+                                text: "CHAT",
+                                clipper: TopButtonsClipper(),
+                                dropdownItems: chatItems,
+                              ),
+                              TopPanelButtons(
+                                index: 7,
+                                text: "ME",
+                                clipper: TopRightClipper(),
+                                dropdownItems: meItems,
+                              )
+                            ],
+                          ),
+                        )),
                   ]),
                 )),
           ),

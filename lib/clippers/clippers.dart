@@ -309,3 +309,28 @@ class StatsClipper extends CustomClipper<Path> {
     return false;
   }
 }
+
+class TopButtonsItemsContainerClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+
+    path.lineTo(0.0, size.height);
+    path.lineTo(0.0, 3.0);
+    path.lineTo(size.width * 0.5 - 25, 3.0);
+    path.lineTo(size.width * 0.5 - 20, 0.0);
+    path.lineTo(size.width * 0.5 + 20, 0.0);
+    path.lineTo(size.width * 0.5 + 25, 3.0);
+    path.lineTo(size.width, 3.0);
+    path.lineTo(size.width, size.height);
+    path.lineTo(0.0, size.height);
+
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper oldClipper) {
+    return false;
+  }
+}
